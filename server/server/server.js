@@ -15,11 +15,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
-app.use(loopback.token({
-  model: app.models.accessToken,
-  currentUserLiteral: 'me'
-}))
-
 app.start = function() {
   // start the web server
   return app.listen(function() {
@@ -40,5 +35,5 @@ boot(app, __dirname, function(err) {
 
   // start the server if `$ node server.js`
   if (require.main === module)
-    app.start();
+    app.server = (app.start());
 });

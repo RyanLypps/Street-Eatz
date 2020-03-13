@@ -4,6 +4,7 @@ import MapView from 'react-native-maps';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { Marker } from 'react-native-maps';
 
 export default class Map extends React.Component {
     state = {
@@ -21,7 +22,7 @@ export default class Map extends React.Component {
             this._getLocationAsync();
         }
     }
-    
+
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -34,19 +35,23 @@ export default class Map extends React.Component {
     };
 
     render() {
+        // const Latlng = {
+        //     latitude: 37.8199,
+        //     longitude: -122.4783
+        //   }
         return (
             <View style={styles.container}>
-                {this.state.location ?   
-                <MapView style={styles.mapStyle} 
-                initialRegion={{
-                    latitude:this.state.location.coords.latitude,
-                    longitude:this.state.location.coords.longitude,
-                    latitudeDelta:0.0922,
-                    longitudeDelta:0.0421,
-                }} 
-                />
-                :
-                <Text>Loading...</Text>}
+                {this.state.location ?
+                    <MapView style={styles.mapStyle}
+                        initialRegion={{
+                            latitude: this.state.location.coords.latitude,
+                            longitude: this.state.location.coords.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        }}>
+                    </MapView>
+                    :
+                    <Text>Loading...</Text>}
             </View>
         );
     }
@@ -54,13 +59,13 @@ export default class Map extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     mapStyle: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
     },
-  });
+});
