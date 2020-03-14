@@ -1,54 +1,83 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View, Text } from "react-native";
+import { StyleSheet, Dimensions, View, Text, YellowBox } from "react-native";
 import MapView from 'react-native-maps';
-import Constants from 'expo-constants';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { Marker } from 'react-native-maps';
+import io from 'socket.io-client';
+import { HOST } from 'react-native-dotenv';
 
 export default class Map extends React.Component {
-    state = {
-        location: null,
-        errorMessage: null,
-    };
-
     constructor(props) {
         super(props);
-        if (Platform.OS === 'android' && !Constants.isDevice) {
-            this.setState({
-                errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-            });
-        } else {
-            this._getLocationAsync();
-        }
+        this.state = {
+            location: null,
+            errorMessage: null
+        };
+        this.mounted = false;
+        
+        YellowBox.ignoreWarnings([
+            'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
+        ])
+
+        this.socket = io.connect(`${HOST}`, { transports: ['websocket'] });
     }
 
-    _getLocationAsync = async () => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-            this.setState({
-                errorMessage: 'Permission to access location was denied',
-            });
-        }
-        let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
-    };
+    componentDidMount() {
+        this.mounted = true;
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                if(this.mounted){
+                this.setState({
+                    location: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }
+                })};
+            },
+            error => console.log(error),
+            { enableHighAccuracy: true, timeout: 20000, distanceFilter: 10 }
+        );
+
+        this.socket.on('mapPositions', locations => {
+            if(this.mounted){
+            this.setState({ foodTruck: locations });
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+    }
 
     render() {
-        // const Latlng = {
-        //     latitude: 37.8199,
-        //     longitude: -122.4783
-        //   }
+        let count = 0;
+
         return (
             <View style={styles.container}>
                 {this.state.location ?
                     <MapView style={styles.mapStyle}
                         initialRegion={{
-                            latitude: this.state.location.coords.latitude,
-                            longitude: this.state.location.coords.longitude,
+                            latitude: this.state.location.latitude,
+                            longitude: this.state.location.longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}>
+                        {this.state.foodTruck ?
+                            this.state.foodTruck.map(location => {
+                                { count++ }
+                                return (
+                                    <Marker
+                                        key={count}
+                                        coordinate={{
+                                            latitude: location.latitude,
+                                            longitude: location.longitude
+                                        }}
+                                    />
+                                );
+                            })
+                            :
+                            <View></View>
+                        }
                     </MapView>
                     :
                     <Text>Loading...</Text>}

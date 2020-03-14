@@ -27,11 +27,11 @@ class Login extends Component {
         email: email,
         password: pass
     })
-    .then(res => this.goToOwnerPage(res.data.id))
+    .then(res => this.goToOwnerPage(res.data.id, res.data.userId))
     .catch(err => alert('Login attempt failed. Wrong username or password.'));
   }
 
-  goToOwnerPage = (token) => Actions.owner(token);
+  goToOwnerPage = (token, userId) => Actions.owner({token: token, userId: userId});
   goToMap = (token) => Actions.map(token);
   goToRegister = () => Actions.register();
 
