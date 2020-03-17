@@ -7,20 +7,21 @@ module.exports = function(app) {
       app.io.on('connection', socket => {
           console.log('user is connected')
       
-          socket.on('position', (location, userId) => {
-            const ownerData = {...location, ...userId}
+          socket.on('position', (location, businessId) => {
+            const ownerData = {...location, ...businessId}
             locations.push(ownerData);
           })
 
           socket.emit('mapPositions', locations.map(a => {
              return {
                  latitude: a.latitude,
-                 longitude: a.longitude
+                 longitude: a.longitude,
+                 businessId: a.businessIds
              }
           }));
           
-          socket.on('disconnectUser', (userId) => {
-            locations = locations.filter(a => a.userId !== userId) || [];
+          socket.on('disconnectUser', (businessId) => {
+            locations = locations.filter(a => a.businessIds !== businessId) || [];
             socket.disconnect();
             console.log('user is disconnected');
           });

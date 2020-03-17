@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, View, Text, YellowBox } from "react-native";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import io from 'socket.io-client';
+import { Actions } from 'react-native-router-flux';
 import { HOST } from 'react-native-dotenv';
 
 export default class Map extends React.Component {
@@ -49,6 +50,8 @@ export default class Map extends React.Component {
         this.mounted = false;
     }
 
+    goToMenu = (businessId) => Actions.menu({businessId: businessId});
+        
     render() {
         let count = 0;
 
@@ -67,6 +70,8 @@ export default class Map extends React.Component {
                                 { count++ }
                                 return (
                                     <Marker
+                                        onPress={() => this.goToMenu(location.businessId)}
+                                        businessId={location.businessId}
                                         key={count}
                                         coordinate={{
                                             latitude: location.latitude,

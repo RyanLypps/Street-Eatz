@@ -12,13 +12,21 @@
     },
     "number": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "menu": {
       "type": [
         "object"
       ],
-      "required": true
+      "required": false
+    },
+    "image": {
+      "type": "string",
+      "required": false
+    },
+    "url": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],

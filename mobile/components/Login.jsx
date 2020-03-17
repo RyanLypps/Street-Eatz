@@ -23,18 +23,23 @@ class Login extends Component {
   }
 
   loginOwner = (email, pass) => {
+
     axios.post(`${HOST}/api/Owners/login`, {
         email: email,
         password: pass
     })
-    .then(res => this.goToOwnerPage(res.data.id, res.data.userId))
+    .then(res => {
+        axios.get(`${HOST}/api/Owners/${res.data.userId}/businesses`)
+        .then(response => this.goToOwnerPage(res.data.id, res.data.userId, response.data.map(business => business.id)))
+        .catch(err => alert('You have no businesses associated with your account'));
+    })
     .catch(err => alert('Login attempt failed. Wrong username or password.'));
   }
 
-  goToOwnerPage = (token, userId) => Actions.owner({token: token, userId: userId});
+  goToOwnerPage = (token, userId, businessIds) => Actions.owner({token: token, userId: userId, businessIds: businessIds});
   goToMap = (token) => Actions.map(token);
   goToRegister = () => Actions.register();
-
+  
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>

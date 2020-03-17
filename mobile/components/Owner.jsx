@@ -18,24 +18,23 @@ export default class Owner extends Component {
   }
 
   componentWillUnmount() {
-    const userId = this.props.userId;
+    const businessIds = this.props.businessIds;
     const { socket } = this.state;
-    socket.emit('disconnectUser', userId);
+    socket.emit('disconnectUser', businessIds[0]);
   }
 
   connectSocket() {
-    const userId = this.props.userId;
-    
+    const businessIds = this.props.businessIds;
     const socket = io.connect(`${HOST}`, { transports: ['websocket'] })
         socket.on('connect', () => {
         alert('Your Food Truck is online!');
-        socket.emit('position', this.state.location, {userId: userId}); 
+        socket.emit('position', this.state.location, {businessIds: businessIds[0]}); 
       })
       this.setState({ socket });
   }
 
   socketSwitch() {
-    const userId = this.props.userId;
+    const businessIds = this.props.businessIds;
 
     if (this.state.switchValue) {
       navigator.geolocation.getCurrentPosition(
@@ -52,7 +51,7 @@ export default class Owner extends Component {
       );
     } else {
       const { socket } = this.state;
-      socket.emit('disconnectUser', userId);
+      socket.emit('disconnectUser', businessIds[0]);
       alert('Your Food Truck is offline!');
     }
   }

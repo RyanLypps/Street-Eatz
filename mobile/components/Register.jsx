@@ -10,7 +10,8 @@ class Register extends Component {
         password: '',
         confirmPassword: '',
         phoneNumber: '',
-        name: ''
+        name: '',
+        value: ''
     }
 
     handleEmail = text => this.setState({ email: text });
@@ -18,7 +19,8 @@ class Register extends Component {
     handleConfirmedPassword = text => this.setState({ confirmedPassword: text });
     handleName = text => this.setState({ name: text });
     handleNumber = text => this.setState({ phoneNumber: text });
-    
+    handleTextChange = (newText) => this.setState({ value: newText });
+ 
     registerUser = (name, phoneNumber, email, password) => {
         axios.post(`${HOST}/api/Customers`, {
             name: name,
