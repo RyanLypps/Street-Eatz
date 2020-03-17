@@ -9,28 +9,38 @@ export default class Owner extends Component {
 
     this.state = {
       switchValue: false,
-      location: null
+      location: null,
+      loading: false
     }
+
+    this.socket = io.connect(`${HOST}`, { transports: ['websocket'] })
 
     YellowBox.ignoreWarnings([
       'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
     ])
   }
 
-  componentWillUnmount() {
+componentDidMount() {
     const businessIds = this.props.businessIds;
-    const { socket } = this.state;
-    socket.emit('disconnectUser', businessIds[0]);
-  }
+      this.socket.emit('checkPosition', businessIds[0])
+
+      this.socket.on('checkPosition', liveTruck => {
+        this.setState({
+          location: {
+            latitude: liveTruck.latitude,
+            longitude: liveTruck.longitude
+          },
+          switchValue: true,
+          loading: true
+        })
+      })
+    }
 
   connectSocket() {
     const businessIds = this.props.businessIds;
-    const socket = io.connect(`${HOST}`, { transports: ['websocket'] })
-        socket.on('connect', () => {
-        alert('Your Food Truck is online!');
-        socket.emit('position', this.state.location, {businessIds: businessIds[0]}); 
-      })
-      this.setState({ socket });
+      alert('Your Food Truck is online!');
+      this.socket.emit('position', this.state.location, {businessIds: businessIds[0]}); 
+      this.setState({ loading: true });
   }
 
   socketSwitch() {
@@ -50,14 +60,13 @@ export default class Owner extends Component {
         { enableHighAccuracy: true, timeout: 20000, distanceFilter: 10 }
       );
     } else {
-      const { socket } = this.state;
-      socket.emit('disconnectUser', businessIds[0]);
+      this.socket.emit('disconnectUser', businessIds[0]);
       alert('Your Food Truck is offline!');
     }
   }
 
   handleToggleSwitch = newState => {
-     if(this.state.switchValue && !this.state.socket) return;
+     if(this.state.switchValue && !this.state.loading) return;
      this.setState(newState, this.socketSwitch);
   }
   

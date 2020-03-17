@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { Text, TouchableOpacity, TextInput, StyleSheet, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { HOST } from 'react-native-dotenv';
+import AnimatedInput from 'react-native-animated-input-label';
 
 class Login extends Component {
   state = {
@@ -45,20 +46,27 @@ class Login extends Component {
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image style={styles.logo} source={require('../assets/logo.png')} />
         <ScrollView scrollEnabled={true}>
-          <TextInput style={styles.input}
+          <AnimatedInput 
+            inputStyle={styles.input}
+            labelStyle={styles.labelInput}
+            style={styles.formInput}
             underlineColorAndroid='transparent'
-            placeholder='Email'
             autoCapitalize='none'
             paddingLeft={10}
             keyboardType={'email-address'}
-            onChangeText={this.handleEmail} />
-          <TextInput style={styles.input}
+            onChangeText={this.handleEmail}>
+            Email</AnimatedInput>
+          <AnimatedInput 
+            inputStyle={styles.input}
+            labelStyle={styles.labelInput}
+            style={styles.formInput}
             underlineColorAndroid='transparent'
-            placeholder='Password'
             autoCapitalize='none'
             paddingLeft={10}
+            keyboardType={'email-address'}
             secureTextEntry={true}
-            onChangeText={this.handlePassword} />
+            onChangeText={this.handlePassword}>
+            Password</AnimatedInput>
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => this.login(this.state.email, this.state.password)}>
@@ -85,15 +93,29 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     backgroundColor: '#ffe599'
   },
+  labelInput: {
+    color: '#ADABAB',
+    fontSize: 15,
+    marginLeft: 30,
+    zIndex: 1,
+    justifyContent: 'space-evenly',
+  },
+  formInput: {
+    marginLeft: 0,
+    marginRight: 0,
+    borderColor: 'black',
+    color: '#B7B8BA',
+  },
   input: {
-    margin: 10,
-    height: 40,
+    margin: 0,
     padding: 2,
     borderColor: 'black',
     backgroundColor: 'white',
     borderWidth: 1,
     marginLeft: 30,
     marginRight: 30,
+    borderRadius: 0,
+    fontSize: 15,
   },
   loginButton: {
     backgroundColor: '#980000',

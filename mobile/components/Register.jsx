@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { HOST } from 'react-native-dotenv';
+import AnimatedInput from 'react-native-animated-input-label';
 
 class Register extends Component {
     state = {
@@ -44,49 +45,68 @@ class Register extends Component {
 
     render() {    
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.png')} />
-                <TextInput style={styles.input}
-                    underlineColorAndroid='transparent'
-                    placeholder='Name'
-                    autoCapitalize='none'
-                    paddingLeft={10}
-                    onChangeText={this.handleName}
-                />
-                <TextInput style={styles.input}
-                    underlineColorAndroid='transparent'
-                    placeholder='Phone Number'
-                    autoCapitalize='none'
-                    paddingLeft={10}
-                    keyboardType={'numeric'}
-                    onChangeText={this.handleNumber}
-                />
-                <TextInput style={styles.input}
-                    underlineColorAndroid='transparent'
-                    placeholder='Email'
-                    autoCapitalize='none'
-                    paddingLeft={10}
-                    onChangeText={this.handleEmail} />
-                <TextInput style={styles.input}
-                    underlineColorAndroid='transparent'
-                    placeholder='Password'
-                    autoCapitalize='none'
-                    paddingLeft={10}
-                    onChangeText={this.handlePassword} />
-                <TextInput style={styles.input}
-                    underlineColorAndroid='transparent'
-                    placeholder='Confirm Password'
-                    autoCapitalize='none'
-                    paddingLeft={10}
-                    onChangeText={this.handleConfirmedPassword}
-                />
-                <TouchableOpacity
-                    style={styles.loginButton}
-                    onPress={() => this.registerUser(this.state.name, this.state.phoneNumber, this.state.email, this.state.password)}>
-                    <Text style={styles.registerButtonText}>Create Account</Text>
-                </TouchableOpacity>
-                <Text style={styles.registerButton} onPress={this.goToLogin} >Return to login page</Text>
-            </View>
+                <ScrollView scrollEnabled={true}>
+                    <AnimatedInput 
+                        inputStyle={styles.input}
+                        labelStyle={styles.labelInput}
+                        style={styles.formInput}
+                        underlineColorAndroid='transparent'
+                        autoCapitalize='none'
+                        paddingLeft={10}
+                        onChangeText={this.handleName}>
+                        Name
+                        </AnimatedInput>
+                    <AnimatedInput
+                        inputStyle={styles.input}
+                        labelStyle={styles.labelInput}
+                        style={styles.formInput}
+                        underlineColorAndroid='transparent'
+                        autoCapitalize='none'
+                        paddingLeft={10}
+                        keyboardType={'numeric'}
+                        onChangeText={this.handleNumber}>
+                        Phone Number
+                        </AnimatedInput>
+                    <AnimatedInput 
+                        inputStyle={styles.input}
+                        labelStyle={styles.labelInput}
+                        style={styles.formInput}
+                        underlineColorAndroid='transparent'
+                        autoCapitalize='none'
+                        paddingLeft={10}
+                        onChangeText={this.handleEmail}>Email
+                    </AnimatedInput>
+                    <AnimatedInput 
+                        inputStyle={styles.input}
+                        labelStyle={styles.labelInput}
+                        style={styles.formInput}
+                        underlineColorAndroid='transparent'
+                        autoCapitalize='none'
+                        paddingLeft={10}
+                        secureTextEntry={true}
+                        onChangeText={this.handlePassword}>Password
+                    </AnimatedInput>
+                    <AnimatedInput 
+                        inputStyle={styles.input}
+                        labelStyle={styles.labelInput}
+                        style={styles.formInput}
+                        underlineColorAndroid='transparent'
+                        autoCapitalize='none'
+                        paddingLeft={10}
+                        secureTextEntry={true}
+                        onChangeText={this.handleConfirmedPassword}>
+                        Confirm Password
+                    </AnimatedInput>
+                    <TouchableOpacity
+                        style={styles.loginButton}
+                        onPress={() => this.registerUser(this.state.name, this.state.phoneNumber, this.state.email, this.state.password)}>
+                        <Text style={styles.registerButtonText}>Create Account</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.registerButton} onPress={this.goToLogin} >Return to login page</Text>
+                </ScrollView>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -100,16 +120,30 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: '#ffe599'
     },
+    labelInput: {
+        color: '#ADABAB',
+        fontSize: 15,
+        marginLeft: 30,
+        zIndex: 1,
+        justifyContent: 'space-evenly',
+      },
+    formInput: {
+        marginLeft: 0,
+        marginRight: 0,
+        borderColor: 'black',
+        color: '#B7B8BA',
+        },
     input: {
-        margin: 10,
-        height: 40,
+        margin: 0,
         padding: 2,
         borderColor: 'black',
         backgroundColor: 'white',
         borderWidth: 1,
         marginLeft: 30,
         marginRight: 30,
-    },
+        borderRadius: 0,
+        fontSize: 15,
+        },
     loginButton: {
         backgroundColor: '#980000',
         padding: 10,
@@ -130,10 +164,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     logo: {
-        width: 400,
-        height: 500,
-        marginBottom: -35,
-        marginTop: -95,
+        width: 375,
+        height: 350,
+        marginBottom: 35,
+        marginTop: 35,
+        marginLeft: 17,
         resizeMode: 'contain',
+        justifyContent: 'center',
     }
 });

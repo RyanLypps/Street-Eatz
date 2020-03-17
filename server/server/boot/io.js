@@ -12,6 +12,13 @@ module.exports = function(app) {
             locations.push(ownerData);
           })
 
+          socket.on('checkPosition', businessId => {
+            const liveTruck = locations.filter(a => a.businessIds == businessId)
+            if(liveTruck.length >= 1){
+              socket.emit('checkPosition', liveTruck)
+            }
+          })
+
           socket.emit('mapPositions', locations.map(a => {
              return {
                  latitude: a.latitude,
