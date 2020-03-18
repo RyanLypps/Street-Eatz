@@ -49,7 +49,6 @@ class Login extends Component {
           <AnimatedInput 
             inputStyle={styles.input}
             labelStyle={styles.labelInput}
-            style={styles.formInput}
             underlineColorAndroid='transparent'
             autoCapitalize='none'
             paddingLeft={10}
@@ -59,7 +58,6 @@ class Login extends Component {
           <AnimatedInput 
             inputStyle={styles.input}
             labelStyle={styles.labelInput}
-            style={styles.formInput}
             underlineColorAndroid='transparent'
             autoCapitalize='none'
             paddingLeft={10}
@@ -100,21 +98,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
     justifyContent: 'space-evenly',
   },
-  formInput: {
-    marginLeft: 0,
-    marginRight: 0,
-    borderColor: 'black',
-    color: '#B7B8BA',
-  },
   input: {
-    margin: 0,
     padding: 2,
     borderColor: 'black',
     backgroundColor: 'white',
     borderWidth: 1,
     marginLeft: 30,
     marginRight: 30,
-    borderRadius: 0,
     fontSize: 15,
   },
   loginButton: {
@@ -130,7 +120,6 @@ const styles = StyleSheet.create({
   ownerLoginButton: {
     backgroundColor: '#980000',
     padding: 10,
-    marginTop: 0,
     marginLeft: 100,
     marginRight: 100,
     marginBottom: 15,

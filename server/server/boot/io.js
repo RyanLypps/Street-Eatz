@@ -7,9 +7,20 @@ module.exports = function(app) {
       app.io.on('connection', socket => {
           console.log('user is connected')
       
-          socket.on('position', (location, businessId) => {
-            const ownerData = {...location, ...businessId}
+          socket.on('position', (location, businessId, selected) => {
+            const ownerData = {...location, ...businessId, ...selected}
             locations.push(ownerData);
+            socket.emit('position');
+          })
+
+          socket.on('checkPosition', businessId => {
+            for(let i = 0; i < businessId.length; i++){
+              const liveTruck = locations.filter(a => a.businessIds == businessId[i])
+              if(liveTruck.length >= 1){
+                socket.emit('checkPosition', liveTruck)
+                return;
+            }
+          }
           })
 
           socket.on('checkPosition', businessId => {
@@ -29,7 +40,7 @@ module.exports = function(app) {
           
           socket.on('disconnectUser', (businessId) => {
             locations = locations.filter(a => a.businessIds !== businessId) || [];
-            socket.disconnect();
+            socket.emit('disconnectUser');
             console.log('user is disconnected');
           });
       });

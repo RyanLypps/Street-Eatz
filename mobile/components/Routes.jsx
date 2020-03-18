@@ -4,7 +4,8 @@ import Register from './Register';
 import Login from './Login';
 import Map from './Map';
 import Owner from './Owner';
-import Menu from './Menu'
+import Menu from './Menu';
+import OwnerSettings from './OwnerSettings';
 
 export default class Routes extends Component {
     render(){
@@ -16,6 +17,7 @@ export default class Routes extends Component {
                 <Scene key= 'register' component = { Register } hideNavBar={true} />
                 <Scene key= 'map' component = { Map } hideNavBar={true} />
                 <Scene key= 'menu' component = { Menu } hideNavBar={true} />
+                <Scene key= 'ownerSettings' component = { OwnerSettings } hideNavBar={true} />
             </Stack>
         </Router>
         );

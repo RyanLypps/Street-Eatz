@@ -51,7 +51,6 @@ class Register extends Component {
                     <AnimatedInput 
                         inputStyle={styles.input}
                         labelStyle={styles.labelInput}
-                        style={styles.formInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         paddingLeft={10}
@@ -61,7 +60,6 @@ class Register extends Component {
                     <AnimatedInput
                         inputStyle={styles.input}
                         labelStyle={styles.labelInput}
-                        style={styles.formInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         paddingLeft={10}
@@ -72,7 +70,6 @@ class Register extends Component {
                     <AnimatedInput 
                         inputStyle={styles.input}
                         labelStyle={styles.labelInput}
-                        style={styles.formInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         paddingLeft={10}
@@ -81,7 +78,6 @@ class Register extends Component {
                     <AnimatedInput 
                         inputStyle={styles.input}
                         labelStyle={styles.labelInput}
-                        style={styles.formInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         paddingLeft={10}
@@ -91,7 +87,6 @@ class Register extends Component {
                     <AnimatedInput 
                         inputStyle={styles.input}
                         labelStyle={styles.labelInput}
-                        style={styles.formInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
                         paddingLeft={10}
@@ -127,12 +122,6 @@ const styles = StyleSheet.create({
         zIndex: 1,
         justifyContent: 'space-evenly',
       },
-    formInput: {
-        marginLeft: 0,
-        marginRight: 0,
-        borderColor: 'black',
-        color: '#B7B8BA',
-        },
     input: {
         margin: 0,
         padding: 2,
