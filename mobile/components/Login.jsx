@@ -31,16 +31,16 @@ class Login extends Component {
     })
     .then(res => {
         axios.get(`${HOST}/api/Owners/${res.data.userId}/businesses`)
-        .then(response => this.goToOwnerPage(res.data.id, res.data.userId, response.data.map(business => business.id)))
+        .then(response => this.goToOwnerMap(res.data.id, res.data.userId, response.data.map(business => business.id)))
         .catch(err => alert('You have no businesses associated with your account'));
     })
     .catch(err => alert('Login attempt failed. Wrong username or password.'));
   }
 
-  goToOwnerPage = (token, userId, businessIds) => Actions.owner({token: token, userId: userId, businessIds: businessIds});
-  goToMap = (token) => Actions.map(token);
+  goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({token: token, userId: userId, businessIds: businessIds});
+  goToMap = (token) => Actions.map({token: token});
   goToRegister = () => Actions.register();
-  
+
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
@@ -51,7 +51,6 @@ class Login extends Component {
             labelStyle={styles.labelInput}
             underlineColorAndroid='transparent'
             autoCapitalize='none'
-            paddingLeft={10}
             keyboardType={'email-address'}
             onChangeText={this.handleEmail}>
             Email</AnimatedInput>
@@ -60,7 +59,6 @@ class Login extends Component {
             labelStyle={styles.labelInput}
             underlineColorAndroid='transparent'
             autoCapitalize='none'
-            paddingLeft={10}
             keyboardType={'email-address'}
             secureTextEntry={true}
             onChangeText={this.handlePassword}>
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#ffe599'
+    backgroundColor: '#ffe599',
   },
   labelInput: {
     color: '#ADABAB',
@@ -129,11 +127,11 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   registerButton: {
     color: 'blue',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   logo: {
     width: 375,

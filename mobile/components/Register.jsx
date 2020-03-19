@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { HOST } from 'react-native-dotenv';
 import AnimatedInput from 'react-native-animated-input-label';
@@ -53,7 +53,6 @@ class Register extends Component {
                         labelStyle={styles.labelInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
-                        paddingLeft={10}
                         onChangeText={this.handleName}>
                         Name
                         </AnimatedInput>
@@ -62,7 +61,6 @@ class Register extends Component {
                         labelStyle={styles.labelInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
-                        paddingLeft={10}
                         keyboardType={'numeric'}
                         onChangeText={this.handleNumber}>
                         Phone Number
@@ -72,7 +70,7 @@ class Register extends Component {
                         labelStyle={styles.labelInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
-                        paddingLeft={10}
+                        keyboardType={'email-address'}
                         onChangeText={this.handleEmail}>Email
                     </AnimatedInput>
                     <AnimatedInput 
@@ -80,7 +78,6 @@ class Register extends Component {
                         labelStyle={styles.labelInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
-                        paddingLeft={10}
                         secureTextEntry={true}
                         onChangeText={this.handlePassword}>Password
                     </AnimatedInput>
@@ -89,7 +86,6 @@ class Register extends Component {
                         labelStyle={styles.labelInput}
                         underlineColorAndroid='transparent'
                         autoCapitalize='none'
-                        paddingLeft={10}
                         secureTextEntry={true}
                         onChangeText={this.handleConfirmedPassword}>
                         Confirm Password

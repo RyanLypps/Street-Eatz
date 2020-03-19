@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Switch, Text, YellowBox, Image, Picker } from 'react-native';
+import { View, StyleSheet, Switch, Text, YellowBox, Image, Picker, ScrollView } from 'react-native';
 import { HOST } from 'react-native-dotenv';
 import io from 'socket.io-client';
 import { Header, Icon, Button } from 'react-native-elements';
@@ -85,22 +85,22 @@ export default class Owner extends Component {
 
   handleToggleSwitch = newState => this.setState(newState, this.socketSwitch);
   toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
-  
+
   logOut() {
     axios.post(`${HOST}/api/Owners/logout?access_token=${this.props.token}`)
-    .then(res => {
-      this.socketCheck;
-      this.socket.emit('disconnectUser', this.state.liveTruck);
-      this.goToLogin();
-    })
+      .then(res => {
+        this.socketCheck;
+        this.socket.emit('disconnectUser', this.state.liveTruck);
+        this.goToLogin();
+      })
   }
 
   goToLogin = () => Actions.login();
-  goToSettings = () => Actions.ownerSettings();
+  goToSettings = (token, userId, businessIds) => Actions.ownerSettings({ token: token, userId: userId, businessIds: businessIds });
+  goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({ token: token, userId: userId, businessIds: businessIds });
 
   render() {
     let count = 0
-
     return (
       <View style={styles.container}>
         <Header
@@ -113,12 +113,15 @@ export default class Owner extends Component {
             onPress={() => this.toggleSideMenu(this.state.sideMenuView)}
           />}
           centerComponent={{ style: { color: '#fff', fontSize: 20 }, text: this.state.name }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
+          rightComponent={<Icon
+            name='home'
+            onPress={() => this.goToOwnerMap(this.props.token, this.props.userId, this.props.businessIds)}
+          />}
         />
         {this.state.sideMenuView ?
           <View style={styles.menu}>
-            <Button title="Settings" onPress={() => this.goToSettings()} buttonStyle={{ backgroundColor: '#980000' }} />
-            <Button title="Logout" onPress={() => this.logOut()} buttonStyle={{ backgroundColor: '#980000' }} />
+            <Button title="Settings" onPress={() => this.goToSettings(this.props.token, this.props.userId, this.props.businessIds)} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
+            <Button title="Logout" onPress={() => this.logOut()} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
           </View>
           : <View></View>}
         <View>
@@ -127,7 +130,7 @@ export default class Owner extends Component {
             source={this.state.businesses.length > 0 ? { uri: (this.state.businesses[this.state.selected]).image } : { uri: 'You dont have an image' }} />
         </View>
         {this.state.loading ?
-          <View  style={{ height: 50, width: '75%' }}></View> :
+          <View style={{ height: 50, width: '75%' }}></View> :
           <Picker
             selectedValue={this.state.selected}
             style={{ height: 50, width: '75%' }}
@@ -143,7 +146,7 @@ export default class Owner extends Component {
           </Picker>
         }
         <View style={styles.switch}>
-          <Text style={ styles.switchButtonText }>Broadcast Food Truck</Text>
+          <Text style={styles.switchButtonText}>Broadcast Food Truck</Text>
           <Switch
             onValueChange={(value) => this.handleToggleSwitch({ switchValue: value })}
             value={this.state.switchValue}
@@ -151,9 +154,9 @@ export default class Owner extends Component {
           />
         </View>
         {this.state.loading ?
-          <Text style={styles.online}>{this.state.businesses.length > 0 ?`${this.state.businesses[this.state.selected].name} is online`: ''}</Text>
+          <Text style={styles.online}>{this.state.businesses.length > 0 ? `${this.state.businesses[this.state.selected].name} is online` : ''}</Text>
           :
-          <Text style={styles.offline}>{this.state.businesses.length > 0 ?`${this.state.businesses[this.state.selected].name} is offline`: ''}</Text>
+          <Text style={styles.offline}>{this.state.businesses.length > 0 ? `${this.state.businesses[this.state.selected].name} is offline` : ''}</Text>
         }
       </View>
     );
@@ -171,7 +174,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 25,
     marginTop: 80
-
   },
   offline: {
     color: '#980000',
@@ -179,7 +181,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     justifyContent: 'space-between',
     marginTop: 80
-
   },
   switch: {
     alignItems: 'center',
@@ -189,7 +190,6 @@ const styles = StyleSheet.create({
   menu: {
     backgroundColor: '#980000',
     alignSelf: 'stretch',
-  
   },
   image: {
     width: 500,

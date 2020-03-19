@@ -13,6 +13,7 @@ export default class Map extends React.Component {
         super(props);
         this.state = {
             location: null,
+            errorMessage: null,
             sideMenuView: false,
         };
         this.mounted = false;
@@ -61,10 +62,9 @@ export default class Map extends React.Component {
       }
     
     goToLogin = () => Actions.login();
-    goToSettings = (token) => Actions.customerSettings({token: token});
-    
+    goToSettings = (token, userId, businessIds) => Actions.ownerSettings({token: token, userId: userId, businessIds: businessIds});
+    goToOwner = (token, userId, businessIds) => Actions.owner({token: token, userId: userId, businessIds: businessIds});
     toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
-    goToMenu = (token, businessId) => Actions.menu({businessId: businessId, token: token});
         
     render() {
         let count = 0;
@@ -83,7 +83,8 @@ export default class Map extends React.Component {
                     />
                     {this.state.sideMenuView ?
                     <View style={styles.menu}>
-                        <Button title="Settings" onPress={() => this.goToSettings(this.props.token)} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
+                        <Button title="Broadcast" onPress={() => this.goToOwner(this.props.token, this.props.userId, this.props.businessIds)} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
+                        <Button title="Settings" onPress={() => this.goToSettings(this.props.token, this.props.userId, this.props.businessIds)} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
                         <Button title="Logout" onPress={() => this.logOut()} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
                     </View>
                     : <View></View>}
@@ -101,7 +102,6 @@ export default class Map extends React.Component {
                                 { count++ }
                                 return (
                                     <Marker
-                                        onPress={() => this.goToMenu(this.props.token, location.businessId)}
                                         businessId={location.businessId}
                                         key={count}
                                         coordinate={{

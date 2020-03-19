@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Header, Icon, Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 
-export default class OwnerSettings extends React.Component {
+export default class CustomerSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,9 +14,7 @@ export default class OwnerSettings extends React.Component {
   toggleSideMenu(sideMenuView) {
     this.setState({ sideMenuView: !sideMenuView })
   }
-
-  goToOwner = (token, userId, businessIds) => Actions.owner({ token: token, userId: userId, businessIds: businessIds });
-  goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({ token: token, userId: userId, businessIds: businessIds });
+  goToMap = (token) => Actions.map({ token: token });
 
   render() {
     return (
@@ -33,14 +31,13 @@ export default class OwnerSettings extends React.Component {
           centerComponent={{ style: { color: '#fff', fontSize: 20 }, text: this.state.name }}
           rightComponent={<Icon
             name='home'
-            onPress={() => this.goToOwnerMap(this.props.token, this.props.userId, this.props.businessIds)}
+            onPress={() => this.goToMap(this.props.token)}
           />}
         />
         {this.state.sideMenuView ?
           <View style={styles.menu}>
-            <Button title="Broadcast" onPress={() => this.goToOwner(this.props.token, this.props.userId, this.props.businessIds)} buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
-            <Button title="Settings" buttonStyle={{ backgroundColor: '#980000' }} />
-            <Button title="Logout" buttonStyle={{ backgroundColor: '#980000' }} />
+            <Button title="Settings" buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
+            <Button title="Logout" buttonStyle={{ backgroundColor: '#980000', borderBottomWidth: .45, borderBottomColor: 'white' }} />
           </View>
           : <View></View>}
         <View></View>
