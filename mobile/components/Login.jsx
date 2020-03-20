@@ -24,7 +24,6 @@ class Login extends Component {
   }
 
   loginOwner = (email, pass) => {
-
     axios.post(`${HOST}/api/Owners/login`, {
         email: email,
         password: pass
@@ -38,7 +37,7 @@ class Login extends Component {
   }
 
   goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({token: token, userId: userId, businessIds: businessIds});
-  goToMap = (token) => Actions.map({token: token});
+  goToMap = token => Actions.map({token: token});
   goToRegister = () => Actions.register();
 
   render() {

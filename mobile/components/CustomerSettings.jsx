@@ -11,10 +11,8 @@ export default class CustomerSettings extends React.Component {
     }
   }
 
-  toggleSideMenu(sideMenuView) {
-    this.setState({ sideMenuView: !sideMenuView })
-  }
-  goToMap = (token) => Actions.map({ token: token });
+  toggleSideMenu= sideMenuView => this.setState({ sideMenuView: !sideMenuView });
+  goToMap = token => Actions.map({ token: token });
 
   render() {
     return (

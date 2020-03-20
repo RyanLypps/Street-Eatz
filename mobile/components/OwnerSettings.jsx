@@ -11,9 +11,9 @@ export default class OwnerSettings extends React.Component {
     }
   }
 
-  toggleSideMenu(sideMenuView) {
-    this.setState({ sideMenuView: !sideMenuView })
-  }
+  toggleSideMenu = sideMenuView =>  this.setState({ sideMenuView: !sideMenuView });
+  goToOwner = (token, userId, businessIds) => Actions.owner({ token: token, userId: userId, businessIds: businessIds });
+  goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({ token: token, userId: userId, businessIds: businessIds });
 
   goToOwner = (token, userId, businessIds) => Actions.owner({ token: token, userId: userId, businessIds: businessIds });
   goToOwnerMap = (token, userId, businessIds) => Actions.ownerMap({ token: token, userId: userId, businessIds: businessIds });

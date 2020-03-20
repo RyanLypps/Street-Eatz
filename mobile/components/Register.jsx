@@ -20,9 +20,13 @@ class Register extends Component {
     handleConfirmedPassword = text => this.setState({ confirmedPassword: text });
     handleName = text => this.setState({ name: text });
     handleNumber = text => this.setState({ phoneNumber: text });
-    handleTextChange = (newText) => this.setState({ value: newText });
+    handleTextChange = newText => this.setState({ value: newText });
  
     registerUser = (name, phoneNumber, email, password) => {
+        if(this.state.password != this.state.confirmPassword) {
+            alert('Your passwords do not match');
+            return;
+        } else {
         axios.post(`${HOST}/api/Customers`, {
             name: name,
             number: phoneNumber,
@@ -38,9 +42,10 @@ class Register extends Component {
             .catch(errLogin => alert('Please enter a valid username and password.'))
         )
         .catch(errCreate => alert('Oops. Something went wrong.'));
+        }
     }
 
-    goToMap = (token) => Actions.map(token);
+    goToMap = token => Actions.map(token);
     goToLogin = () => Actions.login();
 
     render() {    

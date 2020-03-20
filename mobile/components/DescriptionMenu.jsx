@@ -15,15 +15,13 @@ export default class DescriptionMenu extends Component {
 
     logOut() {
         axios.post(`${HOST}/api/Customers/logout?access_token=${this.props.token}`)
-            .then(res => {
-                this.goToLogin();
-            })
+            .then(res => this.goToLogin())
     }
 
-    toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
+    toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView });
     goToLogin = () => Actions.login();
     goToMenu = (token, businessId) => Actions.menu({ businessId: businessId, token: token });
-    goToMap = (token) => Actions.map({ token: token });
+    goToMap = token => Actions.map({ token: token });
 
     render() {
         return (

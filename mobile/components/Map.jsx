@@ -61,9 +61,8 @@ export default class Map extends React.Component {
       }
     
     goToLogin = () => Actions.login();
-    goToSettings = (token) => Actions.customerSettings({token: token});
-    
-    toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
+    goToSettings = token => Actions.customerSettings({token: token});
+    toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView });
     goToMenu = (token, businessId) => Actions.menu({businessId: businessId, token: token});
         
     render() {

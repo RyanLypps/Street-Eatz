@@ -5,6 +5,21 @@ import io from 'socket.io-client';
 import { Header, Icon, Button } from 'react-native-elements';
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
+import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
+
+let location = [];
+let businessId = {};
+let selected = {}
+
+TaskManager.defineTask('watch', ({ data: { locations = [] }, error }) => {
+  if (error) console.error(error);
+  let latitude = {latitude: locations[locations.length - 1].coords.latitude};
+  let longitude = {longitude: locations[locations.length -1 ].coords.longitude};
+  location = {...latitude, ...longitude, ...businessId, ...selected};
+  const socket = io.connect(`${HOST}`, { transports: ['websocket'] });
+  socket.emit(`updateLocation`, location);
+})
 
 export default class Owner extends Component {
   constructor(props) {
@@ -33,18 +48,15 @@ export default class Owner extends Component {
     axios.get(`${HOST}/api/Owners/${this.props.userId}`)
       .then(res => self.setState({ name: res.data.name }))
     axios.get(`${HOST}/api/Owners/${this.props.userId}/businesses`)
-      .then(res => {
-        self.setState({
+      .then(res => self.setState({
           businesses: res.data
-        }, this.socketCheck)
-      })
+        }, this.socketCheck))
   }
 
   socketCheck() {
     this.socket.emit('checkPosition', this.state.businesses.map(business => business.id))
 
     this.socket.on('checkPosition', liveTruck => {
-      console.log(liveTruck);
       this.setState({
         location: {
           latitude: liveTruck[0].latitude,
@@ -61,6 +73,24 @@ export default class Owner extends Component {
   connectSocket() {
     this.socket.emit('position', this.state.location, { businessIds: this.state.businesses[this.state.selected].id }, { selected: this.state.selected });
     this.socket.on('position', () => this.setState({ loading: true, liveTruck: this.state.businesses[this.state.selected].id }));
+    businessId = {businessIds: this.state.businesses[this.state.selected].id};
+    selected = {selected: this.state.selected};
+
+    startLocationUpdates = () => {
+      Location.startLocationUpdatesAsync('watch', {
+          timeInterval: 900000,
+          distanceInterval: 1,
+          accuracy: Location.Accuracy.Highest,
+          foregroundService: {
+              notificationTitle: 'Geotracker',
+              notificationBody: 'Tracking enabled',
+              timeInterval: 900000,
+              distanceInterval: 1,
+              enableHighAccuracy: true,
+          }
+      });
+  }
+  startLocationUpdates();
   }
 
   socketSwitch() {
@@ -80,11 +110,12 @@ export default class Owner extends Component {
     } else {
       this.socket.emit('disconnectUser', this.state.liveTruck)
       this.socket.on('disconnectUser', () => this.setState({ loading: false }))
+      Location.stopLocationUpdatesAsync('watch');
     }
   }
 
-  handleToggleSwitch = newState => this.setState(newState, this.socketSwitch);
-  toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
+  handleToggleSwitch = newState =>this.setState(newState, this.socketSwitch);
+  toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView });
 
   logOut() {
     axios.post(`${HOST}/api/Owners/logout?access_token=${this.props.token}`)

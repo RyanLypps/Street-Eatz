@@ -23,6 +23,14 @@ module.exports = function(app) {
           }
           })
 
+          socket.on('updateLocation', location => {
+            const updatedLocation = locations.filter(a => a.businessIds == location.businessIds);
+            if(updatedLocation.length > 0) {
+              locations = locations.filter(a => a.businessIds !== location.businessIds);
+              locations.push(location);
+            }
+          })
+
           socket.on('checkPosition', businessId => {
             const liveTruck = locations.filter(a => a.businessIds == businessId)
             if(liveTruck.length >= 1){

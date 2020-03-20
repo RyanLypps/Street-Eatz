@@ -50,7 +50,7 @@ export default class Menu extends React.Component {
       );
   }
 
-  goToDescriptionMenu = (image, desc, price, item, token, businessId, category) => Actions.descriptionMenu({ image: image, desc: desc, price: price, item: item, token: token, businessId: businessId, category: category })
+  goToDescriptionMenu = (image, desc, price, item, token, businessId, category) => Actions.descriptionMenu({ image: image, desc: desc, price: price, item: item, token: token, businessId: businessId, category: category });
 
   displayMenu() {
     let count = 0;
@@ -81,7 +81,7 @@ export default class Menu extends React.Component {
             }
             <View style={styles.containerItemInfo}>
               <Text style={styles.title}>{item.item}</Text>
-              <Text style={styles.desc}>{item.desc.length > 55 ? item.desc.slice(0, 55) + '...' : item.desc}</Text>
+              <Text style={styles.desc}>{item.desc && item.desc.length > 55 ? item.desc.slice(0, 55) + '...' : item.desc}</Text>
               <Text style={styles.price}>${item.price}</Text>
             </View>
           </TouchableOpacity>
@@ -92,14 +92,12 @@ export default class Menu extends React.Component {
 
   logOut() {
     axios.post(`${HOST}/api/Customers/logout?access_token=${this.props.token}`)
-      .then(res => {
-        this.goToLogin();
-      })
+      .then(res => this.goToLogin())
   }
 
   goToLogin = () => Actions.login();
   goToSettings = (token) => Actions.customerSettings({ token: token });
-  toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView })
+  toggleSideMenu = sideMenuView => this.setState({ sideMenuView: !sideMenuView });
   goToMap = (token) => Actions.map({ token: token });
 
   render() {
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    resizeMode: 'stretch',
+    resizeMode: 'cover',
   },
   text: {
     fontSize: 15,
