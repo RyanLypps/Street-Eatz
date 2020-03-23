@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffe599'
     },
     labelInput: {
-        color: '#ADABAB',
-        fontSize: 15,
+        color: 'black',
+        fontSize: 12,
         marginLeft: 30,
         zIndex: 1,
         justifyContent: 'space-evenly',
